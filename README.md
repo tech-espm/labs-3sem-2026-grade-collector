@@ -1,2 +1,31 @@
-# labs-3sem-2026-grade-collector
-Jogo Grade Collector
+# Laboratório Experimental - Sistemas de Informação ESPM
+
+<p align="center">
+    <a href="https://www.espm.br/cursos-de-graduacao/sistemas-de-informacao/"><img src="https://raw.githubusercontent.com/tech-espm/misc-template/main/logo.png" alt="Sistemas de Informação ESPM" style="width: 375px;"/></a>
+</p>
+
+# Jogo Grade Collector
+
+### 2026-01
+
+## Visão Geral
+
+## Participantes
+
+- [Gustavo Knorre](https://github.com/GKnorre)
+- [Kevin Lee](https://github.com/kevinnleee)
+- [Ricardo D'Ávila](https://github.com/tec-ricardo)
+
+## Objetivos do Projeto
+
+## Configuração do Projeto
+
+## Mais Informações
+
+# Licença
+
+Este projeto é licenciado sob a [MIT License](https://github.com/tech-espm/labs-3sem-2026-grade-collector/blob/main/LICENSE).
+
+<p align="right">
+    <a href="https://www.espm.br/cursos-de-graduacao/sistemas-de-informacao/"><img src="https://raw.githubusercontent.com/tech-espm/misc-template/main/logo-si-512.png" alt="Sistemas de Informação ESPM" style="width: 375px;"/></a>
+</p>
