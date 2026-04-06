@@ -213,7 +213,7 @@ export class Game extends Phaser.Scene {
 
     GameOver() {
         this.time.delayedCall(2000, () => {
-            this.scene.start('GameOver');
+            this.scene.start('Voce MORREU');
         });
     }
 }
