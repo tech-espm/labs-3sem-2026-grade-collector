@@ -43,7 +43,7 @@ export class Game extends Phaser.Scene {
         this.background2 = this.add.image(this.background1.width, 0, 'background').setOrigin(0);
 
         // Create tutorial text
-        this.tutorialText = this.add.text(this.centreX, this.centreY, 'Tap to fly!', {
+        this.tutorialText = this.add.text(this.centreX, this.centreY - 50, 'Toque para começar!', {
             fontFamily: 'Arial Black', fontSize: 42, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
@@ -208,7 +208,7 @@ export class Game extends Phaser.Scene {
     collectCoin(player, coin) {
         coin.destroy();
         this.score++;
-        this.scoreText.setText(`Score: ${this.score}`);
+        this.scoreText.setText(`Pontuação: ${this.score}`);
     }
 
     GameOver() {
