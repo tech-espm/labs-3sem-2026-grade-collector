@@ -1,7 +1,3 @@
-/*
-* Asset from: https://kenney.nl/assets/pixel-platformer
-*
-*/
 import ASSETS from '../assets.js';
 import ANIMATION from '../animation.js';
 
@@ -19,11 +15,11 @@ export class Game extends Phaser.Scene {
         this.pathHeightMin = 50;
         this.pathHeightMax = 200;
 
-        this.score = 0;
+        this.score = 10; // Alterado: Começa com 10
         this.distance = 0;
         this.distanceMax = 200;
         this.flyVelocity = -200;
-        this.backgroundSpeed = 1;
+        this.backgroundSpeed = 4;
         this.coinDistance = 0;
         this.coinDistanceMax = 50;
         this.spikeDistance = 0;
@@ -33,6 +29,7 @@ export class Game extends Phaser.Scene {
     }
 
     create() {
+        this.score = 10; // Resetar para 10 ao iniciar
         this.centreX = this.scale.width * 0.5;
         this.centreY = this.scale.height * 0.5;
         this.pathHeight = this.pathHeightMax;
@@ -42,21 +39,17 @@ export class Game extends Phaser.Scene {
         this.background1 = this.add.image(0, 0, 'background').setOrigin(0);
         this.background2 = this.add.image(this.background1.width, 0, 'background').setOrigin(0);
 
-        // Create tutorial text
-        this.tutorialText = this.add.text(this.centreX, this.centreY - 50, 'Toque para começar!', {
+        this.tutorialText = this.add.text(this.centreX, this.centreY - 50, 'Toque para estudar!', {
             fontFamily: 'Arial Black', fontSize: 42, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        // Create score text
-        this.scoreText = this.add.text(this.centreX, 50, 'Score: 0', {
-            fontFamily: 'Arial Black', fontSize: 28, color: '#ffffff',
+        this.scoreText = this.add.text(this.centreX, 50, 'Nota: 10', {
+            fontFamily: 'Arial Black', fontSize: 32, color: '#ffff00',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
-        })
-            .setOrigin(0.5)
-            .setDepth(100);
+        }).setOrigin(0.5).setDepth(100);
 
         this.initAnimations();
         this.initPlayer();
@@ -71,7 +64,6 @@ export class Game extends Phaser.Scene {
         if (this.background1.x + this.background1.width < 0) {
             this.background1.x += (this.background1.width * 2);
         }
-
         if (this.background2.x + this.background2.width < 0) {
             this.background2.x += (this.background2.width * 2);
         }
@@ -89,7 +81,7 @@ export class Game extends Phaser.Scene {
 
         if (this.coinDistance > this.coinDistanceMax) {
             this.coinDistance -= this.coinDistanceMax;
-            this.addCoin();
+            this.addGrade();
         }
 
         if (this.spikeDistance > this.spikeDistanceMax) {
@@ -100,12 +92,14 @@ export class Game extends Phaser.Scene {
         this.coinGroup.getChildren().forEach(coin => {
             coin.x -= this.backgroundSpeed;
             coin.refreshBody();
-        }, this);
+            if (coin.x < -50) coin.destroy();
+        });
 
         this.obstacleGroup.getChildren().forEach(obstacle => {
             obstacle.x -= this.backgroundSpeed;
             obstacle.refreshBody();
-        }, this);
+            if (obstacle.x < -50) obstacle.destroy();
+        });
 
         this.updatePath();
     }
@@ -118,34 +112,35 @@ export class Game extends Phaser.Scene {
     updatePath() {
         const d1 = this.pathOffsetTarget - this.pathOffset;
         const d2 = this.pathHeightTarget - this.pathHeight;
-
         this.pathOffset += d1 * 0.01;
         this.pathHeight += d2 * 0.01;
-
         this.pathY = this.centreY + this.pathOffset;
     }
 
     initAnimations() {
-        this.anims.create({
-            key: ANIMATION.bat.key,
-            frames: this.anims.generateFrameNumbers(ANIMATION.bat.texture),
-            frameRate: ANIMATION.bat.frameRate,
-            repeat: ANIMATION.bat.repeat
-        });
-        this.anims.create({
-            key: ANIMATION.coin.key,
-            frames: this.anims.generateFrameNumbers(ANIMATION.coin.texture),
-            frameRate: ANIMATION.coin.frameRate,
-            repeat: ANIMATION.coin.repeat
-        });
+        if (!this.anims.exists(ANIMATION.bat.key)) {
+            this.anims.create({
+                key: ANIMATION.bat.key,
+                frames: this.anims.generateFrameNumbers(ANIMATION.bat.texture),
+                frameRate: ANIMATION.bat.frameRate,
+                repeat: ANIMATION.bat.repeat
+            });
+        }
+        if (!this.anims.exists(ANIMATION.nota_anim.key)) {
+            this.anims.create({
+                key: ANIMATION.nota_anim.key,
+                frames: this.anims.generateFrameNumbers(ANIMATION.nota_anim.texture),
+                frameRate: ANIMATION.nota_anim.frameRate,
+                repeat: ANIMATION.nota_anim.repeat
+            });
+        }
     }
 
     initPhysics() {
         this.obstacleGroup = this.add.group();
         this.coinGroup = this.add.group();
-
         this.physics.add.overlap(this.player, this.obstacleGroup, this.hitObstacle, null, this);
-        this.physics.add.overlap(this.player, this.coinGroup, this.collectCoin, null, this);
+        this.physics.add.overlap(this.player, this.coinGroup, this.collectGrade, null, this);
     }
 
     initPlayer() {
@@ -165,18 +160,26 @@ export class Game extends Phaser.Scene {
     startGame() {
         this.gameStarted = true;
         this.physics.resume();
-        this.input.on('pointerdown', () => {
-            this.fly();
-        });
-
+        this.input.on('pointerdown', () => { this.fly(); });
         this.fly();
         this.tutorialText.setVisible(false);
     }
 
-    addCoin() {
-        const coin = this.physics.add.staticSprite(this.scale.width + 50, this.pathY, ASSETS.spritesheet.coin.key);
-        coin.anims.play(ANIMATION.coin.key, true);
-        this.coinGroup.add(coin);
+    addGrade() {
+        const isGood = Phaser.Math.RND.between(0, 10) > 3; 
+        const assetKey = isGood ? 'nota_boa' : 'nota_ruim';
+        
+        const grade = this.physics.add.staticSprite(this.scale.width + 50, this.pathY, assetKey);
+        
+        if (!isGood) {
+            grade.setTint(0xff0000); 
+            grade.setData('value', -1);
+        } else {
+            grade.setData('value', 1);
+        }
+
+        grade.anims.play('nota_anim', true);
+        this.coinGroup.add(grade);
     }
 
     addSpike() {
@@ -191,29 +194,35 @@ export class Game extends Phaser.Scene {
     }
 
     hitObstacle(player, obstacle) {
+        if (!this.gameStarted) return; // Evita múltiplas chamadas
         this.gameStarted = false;
         this.physics.pause();
-
         this.tweens.add({
             targets: this.player,
             scale: 3,
             alpha: 0,
-            duration: 1000,
+            duration: 800,
             ease: Phaser.Math.Easing.Expo.Out
         });
-
         this.GameOver();
     }
 
-    collectCoin(player, coin) {
-        coin.destroy();
-        this.score++;
-        this.scoreText.setText(`Pontuação: ${this.score}`);
+    collectGrade(player, grade) {
+        const val = grade.getData('value');
+        this.score += val;
+        
+        this.scoreText.setText(`Nota: ${this.score}`);
+        grade.destroy();
+
+        // Nova condição: Se a nota for menor que 0, perde o jogo
+        if (this.score < 0) {
+            this.hitObstacle(this.player, null);
+        }
     }
 
     GameOver() {
-        this.time.delayedCall(2000, () => {
-            this.scene.start('Voce MORREU');
+        this.time.delayedCall(1000, () => {
+            this.scene.start('GameOver');
         });
     }
 }

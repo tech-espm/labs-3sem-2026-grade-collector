@@ -8,10 +8,10 @@ export default {
         frameRate: 10,
         repeat: -1
     },
-    'coin': 
+    'nota_anim': // Uma única animação para os sprites de nota
     {
-        key: 'coin',
-        texture: ASSETS.spritesheet.coin.key,
+        key: 'nota_anim',
+        texture: ASSETS.spritesheet.nota_boa.key,
         frameRate: 5,
         repeat: -1
     },

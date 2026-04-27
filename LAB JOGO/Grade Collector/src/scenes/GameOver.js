@@ -4,13 +4,25 @@ export class GameOver extends Phaser.Scene {
     }
 
     create() {
-        this.background1 = this.add.image(0, 0, 'background').setOrigin(0);
+        // Fundo
+        this.add.image(0, 0, 'background').setOrigin(0);
 
-        this.add.text(this.scale.width * 0.5, this.scale.height * 0.5, 'Game Over', {
-            fontFamily: 'Arial Black', fontSize: 64, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
+        // Mensagem de Reprovado
+        this.add.text(this.scale.width * 0.5, this.scale.height * 0.4, 'REPROVADO', {
+            fontFamily: 'Arial Black', fontSize: 80, color: '#ff0000',
+            stroke: '#000000', strokeThickness: 12,
             align: 'center'
         }).setOrigin(0.5);
 
+        this.add.text(this.scale.width * 0.5, this.scale.height * 0.6, 'Toque para tentar a recuperação', {
+            fontFamily: 'Arial Black', fontSize: 32, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 6,
+            align: 'center'
+        }).setOrigin(0.5);
+
+        // Reiniciar o jogo ao clicar
+        this.input.once('pointerdown', () => {
+            this.scene.start('Game');
+        });
     }
 }

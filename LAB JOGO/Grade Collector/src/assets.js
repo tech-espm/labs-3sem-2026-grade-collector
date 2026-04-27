@@ -1,10 +1,4 @@
 export default {
-    // 'audio': {
-    //     score: {
-    //         key: 'sound',
-    //         args: ['assets/sound.mp3', 'assets/sound.m4a', 'assets/sound.ogg']
-    //     },
-    // },
     'image': {
         spikes: {
             key: 'spikes',
@@ -19,12 +13,21 @@ export default {
                 frameHeight: 48,
             }]
         },
-        coin: {
-            key: 'coin',
+        // Usaremos a mesma base para nota boa e ruim
+        nota_boa: {
+            key: 'nota_boa',
             args: ['assets/coin.png', {
-                frameWidth: 36,
+                frameWidth: 54,
                 frameHeight: 36
             }]
         },
+        nota_ruim: {
+            key: 'nota_ruim',
+            args: ['assets/coin.png', {
+                frameWidth: 54,
+                frameHeight: 36
+            }]
+        },
+
     }
 };
