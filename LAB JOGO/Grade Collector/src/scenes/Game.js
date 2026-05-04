@@ -260,6 +260,10 @@ export class Game extends Phaser.Scene {
     }
 
     GameWin() {
+        
+                if (!this.gameStarted) return; // Evita múltiplas chamadas
+                this.gameStarted = false;
+                this.physics.pause();
         this.scene.start('GameWin');
     }
 }
