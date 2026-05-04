@@ -245,10 +245,10 @@ export class Game extends Phaser.Scene {
         this.scoreText.setText(`Nota: ${this.score}`);
         grade.destroy();
 
-        // Nova condição: Se a nota for menor que 0, perde o jogo
-        if (this.score < 0) {
+        // Nova condição: Se a nota for 6, perde o jogo
+        if (this.score <= 6) {
             this.hitObstacle(this.player, null);
-        } else if (this.score >= 15) {
+        } else if (this.score >= 25) {
             this.GameWin();
         }
     }
