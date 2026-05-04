@@ -20,8 +20,8 @@ export class Game extends Phaser.Scene {
         this.distanceMax = 200;
         this.flyVelocity = -200;
         this.backgroundSpeed = 4;
-        this.coinDistance = 0;
-        this.coinDistanceMax = 50;
+        this.coinDistance = 10;
+        this.coinDistanceMax = 150;
         this.spikeDistance = 0;
         this.spikeDistanceMax = 18;
 
@@ -34,19 +34,19 @@ export class Game extends Phaser.Scene {
         this.centreY = this.scale.height * 0.5;
         this.pathHeight = this.pathHeightMax;
 
-        this.cameras.main.setBackgroundColor(0x00ff00);
+        this.cameras.main.setBackgroundColor(0x000000);
 
         this.background1 = this.add.image(0, 0, 'background').setOrigin(0);
         this.background2 = this.add.image(this.background1.width, 0, 'background').setOrigin(0);
 
         this.tutorialText = this.add.text(this.centreX, this.centreY - 50, 'Toque para estudar!', {
-            fontFamily: 'Arial Black', fontSize: 42, color: '#ffffff',
+            fontFamily: 'PressStart2P', fontSize: 42, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
         this.scoreText = this.add.text(this.centreX, 50, 'Nota: 10', {
-            fontFamily: 'Arial Black', fontSize: 32, color: '#ffff00',
+            fontFamily: 'PressStart2P', fontSize: 32, color: '#ffff00',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5).setDepth(100);
@@ -126,12 +126,36 @@ export class Game extends Phaser.Scene {
                 repeat: ANIMATION.bat.repeat
             });
         }
-        if (!this.anims.exists(ANIMATION.nota_anim.key)) {
+        if (!this.anims.exists(ANIMATION.nota_boa0_anim.key)) {
             this.anims.create({
-                key: ANIMATION.nota_anim.key,
-                frames: this.anims.generateFrameNumbers(ANIMATION.nota_anim.texture),
-                frameRate: ANIMATION.nota_anim.frameRate,
-                repeat: ANIMATION.nota_anim.repeat
+                key: ANIMATION.nota_boa0_anim.key,
+                frames: this.anims.generateFrameNumbers(ANIMATION.nota_boa0_anim.texture),
+                frameRate: ANIMATION.nota_boa0_anim.frameRate,
+                repeat: ANIMATION.nota_boa0_anim.repeat
+            });
+        }
+        if (!this.anims.exists(ANIMATION.nota_boa1_anim.key)) {
+            this.anims.create({
+                key: ANIMATION.nota_boa1_anim.key,
+                frames: this.anims.generateFrameNumbers(ANIMATION.nota_boa1_anim.texture),
+                frameRate: ANIMATION.nota_boa1_anim.frameRate,
+                repeat: ANIMATION.nota_boa1_anim.repeat
+            });
+        }
+        if (!this.anims.exists(ANIMATION.nota_ruim0_anim.key)) {
+            this.anims.create({
+                key: ANIMATION.nota_ruim0_anim.key,
+                frames: this.anims.generateFrameNumbers(ANIMATION.nota_ruim0_anim.texture),
+                frameRate: ANIMATION.nota_ruim0_anim.frameRate,
+                repeat: ANIMATION.nota_ruim0_anim.repeat
+            });
+        }
+        if (!this.anims.exists(ANIMATION.nota_ruim1_anim.key)) {
+            this.anims.create({
+                key: ANIMATION.nota_ruim1_anim.key,
+                frames: this.anims.generateFrameNumbers(ANIMATION.nota_ruim1_anim.texture),
+                frameRate: ANIMATION.nota_ruim1_anim.frameRate,
+                repeat: ANIMATION.nota_ruim1_anim.repeat
             });
         }
     }
@@ -166,19 +190,26 @@ export class Game extends Phaser.Scene {
     }
 
     addGrade() {
+        // Inclui 0 e 10
         const isGood = Phaser.Math.RND.between(0, 10) > 3; 
-        const assetKey = isGood ? 'nota_boa' : 'nota_ruim';
+
+        let assetKey;
+        if (isGood) {
+            assetKey = 'nota_boa' + Phaser.Math.RND.between(0, 1);
+        } else {
+            assetKey = 'nota_ruim' + Phaser.Math.RND.between(0, 1);
+        }
         
         const grade = this.physics.add.staticSprite(this.scale.width + 50, this.pathY, assetKey);
         
         if (!isGood) {
-            grade.setTint(0xff0000); 
+            //grade.setTint(0xff0000); 
             grade.setData('value', -1);
         } else {
             grade.setData('value', 1);
         }
 
-        grade.anims.play('nota_anim', true);
+        grade.anims.play(assetKey + '_anim', true);
         this.coinGroup.add(grade);
     }
 
@@ -217,6 +248,8 @@ export class Game extends Phaser.Scene {
         // Nova condição: Se a nota for menor que 0, perde o jogo
         if (this.score < 0) {
             this.hitObstacle(this.player, null);
+        } else if (this.score >= 15) {
+            this.GameWin();
         }
     }
 
@@ -224,5 +257,9 @@ export class Game extends Phaser.Scene {
         this.time.delayedCall(1000, () => {
             this.scene.start('GameOver');
         });
+    }
+
+    GameWin() {
+        this.scene.start('GameWin');
     }
 }

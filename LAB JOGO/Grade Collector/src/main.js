@@ -1,6 +1,7 @@
 import { Boot } from './scenes/Boot.js';
 import { Game } from './scenes/Game.js';
 import { GameOver } from './scenes/GameOver.js';
+import { GameWin } from "./scenes/GameWin.js";
 
 const config = {
     type: Phaser.AUTO,
@@ -19,7 +20,9 @@ const config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [Boot, Game, GameOver]
+    scene: [Boot, Game, GameOver, GameWin]
 };
 
-new Phaser.Game(config);
+setTimeout(function () {
+	new Phaser.Game(config);
+}, 2000);

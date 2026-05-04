@@ -14,20 +14,33 @@ export default {
             }]
         },
         // Usaremos a mesma base para nota boa e ruim
-        nota_boa: {
-            key: 'nota_boa',
-            args: ['assets/coin.png', {
-                frameWidth: 54,
+        nota_boa0: {
+            key: 'nota_boa0',
+            args: ['assets/nota_boa0.png', {
+                frameWidth: 36,
                 frameHeight: 36
             }]
         },
-        nota_ruim: {
-            key: 'nota_ruim',
-            args: ['assets/coin.png', {
-                frameWidth: 54,
+        nota_boa1: {
+            key: 'nota_boa1',
+            args: ['assets/nota_boa1.png', {
+                frameWidth: 36,
                 frameHeight: 36
             }]
         },
-
+        nota_ruim0: {
+            key: 'nota_ruim0',
+            args: ['assets/nota_ruim0.png', {
+                frameWidth: 36,
+                frameHeight: 36
+            }]
+        },
+        nota_ruim1: {
+            key: 'nota_ruim1',
+            args: ['assets/nota_ruim1.png', {
+                frameWidth: 36,
+                frameHeight: 36
+            }]
+        },
     }
 };
