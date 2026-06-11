@@ -39,11 +39,35 @@ export class Game extends Phaser.Scene {
         this.background1 = this.add.image(0, 0, 'background').setOrigin(0);
         this.background2 = this.add.image(this.background1.width, 0, 'background').setOrigin(0);
 
-        this.tutorialText = this.add.text(this.centreX, this.centreY - 50, 'Toque para estudar!', {
+        this.tutorialText = this.add.text(this.centreX, this.centreY - 70, 'Toque para estudar!', {
             fontFamily: 'PressStart2P', fontSize: 42, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
+
+        this.rulesButton = this.add.rectangle(this.centreX, this.centreY + 35, 430, 70, 0x000000, 0.75)
+            .setStrokeStyle(4, 0xffffff)
+            .setInteractive({ useHandCursor: true });
+
+        this.rulesButtonText = this.add.text(this.centreX, this.centreY + 35, 'VER REGRAS', {
+            fontFamily: 'PressStart2P', fontSize: 24, color: '#ffffff',
+            align: 'center'
+        }).setOrigin(0.5);
+
+        this.rulesButton.on('pointerover', () => {
+            this.rulesButton.setFillStyle(0x333333, 0.9);
+            this.rulesButtonText.setColor('#ffff00');
+        });
+
+        this.rulesButton.on('pointerout', () => {
+            this.rulesButton.setFillStyle(0x000000, 0.75);
+            this.rulesButtonText.setColor('#ffffff');
+        });
+
+        this.rulesButton.on('pointerdown', (pointer, localX, localY, event) => {
+            event.stopPropagation();
+            this.scene.start('Rules');
+        });
 
         this.scoreText = this.add.text(this.centreX, 50, 'Nota: 10', {
             fontFamily: 'PressStart2P', fontSize: 32, color: '#ffff00',
@@ -187,6 +211,8 @@ export class Game extends Phaser.Scene {
         this.input.on('pointerdown', () => { this.fly(); });
         this.fly();
         this.tutorialText.setVisible(false);
+        this.rulesButton.setVisible(false).disableInteractive();
+        this.rulesButtonText.setVisible(false);
     }
 
     addGrade() {
@@ -248,7 +274,7 @@ export class Game extends Phaser.Scene {
         // Nova condição: Se a nota for 6, perde o jogo
         if (this.score <= 6) {
             this.hitObstacle(this.player, null);
-        } else if (this.score >= 25) {
+        } else if (this.score >= 20) {
             this.GameWin();
         }
     }
