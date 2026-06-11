@@ -15,7 +15,7 @@ export class Game extends Phaser.Scene {
         this.pathHeightMin = 50;
         this.pathHeightMax = 200;
 
-        this.score = 10; // Alterado: Começa com 10
+        this.score = 5; // Alterado: Começa com 5
         this.distance = 0;
         this.distanceMax = 200;
         this.flyVelocity = -200;
@@ -29,7 +29,7 @@ export class Game extends Phaser.Scene {
     }
 
     create() {
-        this.score = 10; // Resetar para 10 ao iniciar
+        this.score = 5; // Resetar para 5 ao iniciar
         this.centreX = this.scale.width * 0.5;
         this.centreY = this.scale.height * 0.5;
         this.pathHeight = this.pathHeightMax;
@@ -69,7 +69,7 @@ export class Game extends Phaser.Scene {
             this.scene.start('Rules');
         });
 
-        this.scoreText = this.add.text(this.centreX, 50, 'Nota: 10', {
+        this.scoreText = this.add.text(this.centreX, 50, 'Nota: ' + this.score, {
             fontFamily: 'PressStart2P', fontSize: 32, color: '#ffff00',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
@@ -216,8 +216,8 @@ export class Game extends Phaser.Scene {
     }
 
     addGrade() {
-        // Inclui 0 e 10
-        const isGood = Phaser.Math.RND.between(0, 10) > 3; 
+        // Inclui 0 e 9
+        const isGood = Phaser.Math.RND.between(0, 9) > 4;
 
         let assetKey;
         if (isGood) {
@@ -271,10 +271,10 @@ export class Game extends Phaser.Scene {
         this.scoreText.setText(`Nota: ${this.score}`);
         grade.destroy();
 
-        // Nova condição: Se a nota for 6, perde o jogo
-        if (this.score <= 6) {
+        // Nova condição: Se a nota for 0, perde o jogo
+        if (this.score <= 0) {
             this.hitObstacle(this.player, null);
-        } else if (this.score >= 20) {
+        } else if (this.score >= 10) {
             this.GameWin();
         }
     }

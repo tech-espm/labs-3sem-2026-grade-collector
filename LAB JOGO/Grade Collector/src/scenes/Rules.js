@@ -6,7 +6,7 @@ export class Rules extends Phaser.Scene {
     create() {
         this.add.image(0, 0, 'background').setOrigin(0);
 
-        this.add.text(this.scale.width * 0.5, 90, 'REGRAS DO JOGO', {
+        this.add.text(this.scale.width * 0.5, 60, 'REGRAS DO JOGO', {
             fontFamily: 'PressStart2P', fontSize: 48, color: '#ffff00',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
@@ -17,8 +17,8 @@ export class Rules extends Phaser.Scene {
             '2. Desvie dos espinhos.',
             '3. Colete suas prioridades para aumentar sua nota.',
             '4. Evite o Roblox e o Tiktok, eles diminuem sua nota.',
-            '5. Se sua nota chegar a 6 ou menos, voce reprova.',
-            '6. Chegue a 20 pontos para ser aprovado!'
+            '5. Se sua nota chegar a 0 ou menos, voce reprova.',
+            '6. Chegue a 10 pontos para ser aprovado!'
         ].join('\n\n');
 
         this.add.text(this.scale.width * 0.5, 320, rulesText, {
